@@ -11,8 +11,12 @@ import colors from '../themes/Colors';
 import CustomTextInput from '../components/CustomTextInput';
 import SearchIcon from '../assets/Images/SearchIcon.png';
 import TodoItem from '../components/TodoItem';
+import CustomButton from '../components/CustomButton';
+import {useNavigation} from '@react-navigation/native';
+import ScreenName from '../constants/ScreenName';
 
 const TaskListScreen = () => {
+  const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tasks, setTasks] = useState([
     {
@@ -61,13 +65,20 @@ const TaskListScreen = () => {
             value={searchText}
             onChangeText={setSearchText}
             imageSource={SearchIcon}
+            style={{marginHorizontal: 0}}
             placeholder="Search Task"
           />
           <FlatList
+            keyExtractor={item => item?.id.toString()}
+            showsVerticalScrollIndicator={false}
             data={tasks}
             renderItem={({item}) => <TodoItem data={item} />}
           />
         </SafeAreaView>
+        <CustomButton
+          onPress={() => navigation.navigate(ScreenName.addTask)}
+          label={'Add Task'}
+        />
       </View>
     </View>
   );

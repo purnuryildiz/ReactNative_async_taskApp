@@ -9,16 +9,27 @@ import {
 import React from 'react';
 import colors from '../themes/Colors';
 
-const CustomTextInput = ({imageSource, onChangeText, value, ...rest}) => {
+const CustomTextInput = ({
+  imageSource,
+  onChangeText,
+  value,
+  style,
+  icon,
+  label,
+  ...rest
+}) => {
   return (
-    <TouchableOpacity style={styles.container}>
-      {/* <Text>Task</Text> */}
-      <View style={styles.inputContainer}>
-        <Image source={imageSource} style={styles.image} />
+    <TouchableOpacity style={[styles.container, style]}>
+      <Text style={styles.label}>{label} </Text>
+      <View style={[styles.inputContainer]}>
+        {imageSource ? (
+          <Image source={imageSource} style={styles.image} />
+        ) : null}
+        {icon}
         <TextInput
           value={value}
           onChangeText={onChangeText}
-          style={styles.textInput}
+          style={[styles.textInput, style]}
           {...rest}
         />
       </View>
@@ -33,6 +44,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 15,
   },
+  label: {},
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -41,6 +53,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 15,
   },
+
   image: {
     width: 20,
     height: 20,
@@ -49,5 +62,15 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     padding: 0,
+  },
+  textDescription: {
+    textAlignVertical: 'top',
+  },
+
+  label: {
+    fontSize: 15,
+    color: colors.text.primary,
+    fontWeight: '600',
+    marginVertical: 10,
   },
 });

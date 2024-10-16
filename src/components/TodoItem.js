@@ -4,6 +4,7 @@ import colors from '../themes/Colors';
 import StatusButton from './StatusButton';
 import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../constants/ScreenName';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const TodoItem = ({data}) => {
   const navigation = useNavigation();
@@ -53,6 +54,23 @@ const TodoItem = ({data}) => {
           <StatusButton iconName="delete" color={'#c0695e'} />
         </View>
       </View>
+      <Text style={styles.taskDescription}>{data?.description} </Text>
+      <View style={styles.footerContainer}>
+        <View>
+          <Text style={styles.dateText}>Start Date </Text>
+          <View style={styles.timeContainer}>
+            <Icon name="calendar-minus" color={colors.primary} size={18} />
+            <Text style={styles.timeText}>16.10.2024 -09:35</Text>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.dateText}>End Date </Text>
+          <View style={styles.timeContainer}>
+            <Icon name="calendar-check" color={colors.primary} size={18} />
+            <Text style={styles.timeText}>25.10.2024 - 09:35</Text>
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
@@ -86,5 +104,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 10,
+  },
+  taskDescription: {},
+  footerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 4,
+    marginTop: 10,
+  },
+  dateText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  timeText: {
+    fontSize: 15,
+    color: colors.primary,
   },
 });
