@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../constants/ScreenName';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
-const TodoItem = ({data}) => {
+const TodoItem = ({data, onDelete}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -49,25 +49,29 @@ const TodoItem = ({data}) => {
           <StatusButton
             iconName="pencil"
             color={colors.primary}
-            onPress={() => navigation.navigate(ScreenName.addTask)}
+            onPress={() => navigation.navigate(ScreenName.addTask, {data})}
           />
-          <StatusButton iconName="delete" color={'#c0695e'} />
+          <StatusButton
+            onPress={() => onDelete()}
+            iconName="delete"
+            color={'#c0695e'}
+          />
         </View>
       </View>
       <Text style={styles.taskDescription}>{data?.description} </Text>
       <View style={styles.footerContainer}>
         <View>
-          <Text style={styles.dateText}>Start Date </Text>
+          <Text style={styles.dateText}>Start Date: </Text>
           <View style={styles.timeContainer}>
             <Icon name="calendar-minus" color={colors.primary} size={18} />
-            <Text style={styles.timeText}>16.10.2024 -09:35</Text>
+            <Text style={styles.timeText}>{data.startDate} </Text>
           </View>
         </View>
         <View>
-          <Text style={styles.dateText}>End Date </Text>
+          <Text style={styles.dateText}>End Date: </Text>
           <View style={styles.timeContainer}>
             <Icon name="calendar-check" color={colors.primary} size={18} />
-            <Text style={styles.timeText}>25.10.2024 - 09:35</Text>
+            <Text style={styles.timeText}>{data.endDate} </Text>
           </View>
         </View>
       </View>
@@ -105,7 +109,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 10,
   },
-  taskDescription: {},
+  taskDescription: {
+    marginVertical: 15,
+  },
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -119,7 +125,6 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 16,
-    fontWeight: '600',
   },
   timeText: {
     fontSize: 15,

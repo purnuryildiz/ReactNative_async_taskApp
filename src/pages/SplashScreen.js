@@ -1,24 +1,30 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AsyncStorageKey from '../constants/AsyncStorageKey';
 import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../constants/ScreenName';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
-  async function checkOnboardingComplete() {
-    const onboardingComplete = await AsyncStorage.getItem(
-      AsyncStorageKey.onboardingComplete,
-    );
 
-    if (onboardingComplete === 'true') {
+  useEffect(() => {
+    const checkOnboardingComplete = async () => {
+      console.log('SplashScreen çalışıyor...');
+
+      // AsyncStorage'ı temizleme
+      // await AsyncStorage.clear(); // Bunu geçici olarak yorumlayabilirsiniz
+
+      // Her durumda TaskListScreen'e yönlendir
       navigation.replace(ScreenName.tasklist);
-    } else {
-      navigation.replace(ScreenName.onboarding);
-    }
-  }
+    };
+
+    const timer = setTimeout(() => {
+      checkOnboardingComplete();
+    }, 3000); // 3 saniye
+
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -27,11 +33,6 @@ const SplashScreen = () => {
         source={require('../assets/Animations/to-do.json')}
         style={{flex: 1}}
         loop={false}
-        onAnimationFinish={() => {
-          setTimeout(() => {
-            checkOnboardingComplete();
-          }, 1500);
-        }}
       />
     </View>
   );

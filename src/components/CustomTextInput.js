@@ -15,23 +15,32 @@ const CustomTextInput = ({
   value,
   style,
   icon,
+  onPressIcon,
+  isDate,
   label,
   ...rest
 }) => {
   return (
-    <TouchableOpacity style={[styles.container, style]}>
+    <TouchableOpacity
+      disabled={onPressIcon ? false : true}
+      onPress={() => onPressIcon()}
+      style={[styles.container, style]}>
       <Text style={styles.label}>{label} </Text>
       <View style={[styles.inputContainer]}>
         {imageSource ? (
           <Image source={imageSource} style={styles.image} />
         ) : null}
         {icon}
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          style={[styles.textInput, style]}
-          {...rest}
-        />
+        {!onPressIcon ? (
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            style={[styles.textInput, style]}
+            {...rest}
+          />
+        ) : (
+          <Text>{value} </Text>
+        )}
       </View>
     </TouchableOpacity>
   );

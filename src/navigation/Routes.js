@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 export default function Routes() {
   return (
     <Stack.Navigator
-      initialRouteName="Splash"
+      initialRouteName={ScreenName.splash}
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.background.primary,
@@ -19,12 +19,12 @@ export default function Routes() {
         headerTintColor: colors.text,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen name={ScreenName.addTask} component={AddTaskScreen} />
       <Stack.Screen
         options={{headerShown: false}}
         name={ScreenName.tasklist}
         component={TaskListScreen}
       />
+      <Stack.Screen name={ScreenName.addTask} component={AddTaskScreen} />
 
       <Stack.Screen
         options={{headerShown: false}}
