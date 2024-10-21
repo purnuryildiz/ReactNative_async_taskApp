@@ -1,5 +1,7 @@
+import colors from '../themes/Colors';
+
 const {default: LottieView} = require('lottie-react-native');
-const {View, StyleSheet} = require('react-native');
+const {View, StyleSheet, Text} = require('react-native');
 
 const renderEmptyList = () => {
   return (
@@ -10,6 +12,11 @@ const renderEmptyList = () => {
         loop
         style={styles.lottie}
       />
+      <View style={{position: 'absolute', bottom: 5}}>
+        <Text style={{fontWeight: 'bold', color: colors.primary}}>
+          Hey! Create new tasks..
+        </Text>
+      </View>
     </View>
   );
 };

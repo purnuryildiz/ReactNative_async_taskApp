@@ -18,6 +18,7 @@ const CustomTextInput = ({
   onPressIcon,
   isDate,
   label,
+  maxLength,
   ...rest
 }) => {
   return (
@@ -36,6 +37,7 @@ const CustomTextInput = ({
             value={value}
             onChangeText={onChangeText}
             style={[styles.textInput, style]}
+            maxLength={maxLength}
             {...rest}
           />
         ) : (

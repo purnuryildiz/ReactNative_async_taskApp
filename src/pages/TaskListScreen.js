@@ -95,10 +95,16 @@ const TaskListScreen = () => {
     <View style={styles.container}>
       <View style={styles.mainContentContainer}>
         <SafeAreaView style={[styles.container, {marginBottom: 20}]}>
-          <TouchableOpacity onPress={clearAll} style={styles.button}>
-            <Text style={styles.buttonText}>Clear All</Text>
-          </TouchableOpacity>
-
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(ScreenName.pomodoroTimer)}
+              style={styles.button}>
+              <Text style={styles.buttonText}> Pomodoro</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={clearAll} style={styles.button}>
+              <Text style={styles.buttonText}>Clear All</Text>
+            </TouchableOpacity>
+          </View>
           <CustomTextInput
             value={searchText}
             onChangeText={setSearchText}
@@ -148,17 +154,17 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: colors.text.primary,
+    color: colors.primary,
   },
   button: {
     paddingHorizontal: 0,
     paddingVertical: 10,
 
-    alignSelf: 'flex-end',
     alignItems: 'center',
     backgroundColor: colors.white,
     width: '30%',
-    marginBottom: -20,
+    marginBottom: -30,
+    marginTop: 5,
   },
   buttonText: {
     color: colors.primary,

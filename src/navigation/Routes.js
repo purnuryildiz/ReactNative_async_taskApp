@@ -5,6 +5,7 @@ import OnboardingScreen from '../pages/OnboardingScreen';
 import TaskListScreen from '../pages/TaskListScreen';
 import AddTaskScreen from '../pages/AddTaskScreen';
 import colors from '../themes/Colors';
+import PomodoroTimer from '../pages/PomodoroTimer';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,11 @@ export default function Routes() {
         options={{headerShown: false}}
         name={ScreenName.splash}
         component={SplashScreen}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name={ScreenName.pomodoroTimer}
+        component={PomodoroTimer}
       />
     </Stack.Navigator>
   );

@@ -3,4 +3,5 @@ export default {
   onboarding: 'Onboarding',
   tasklist: 'TaskList',
   addTask: 'AddTask',
+  pomodoroTimer: 'PomodoroTimer',
 };

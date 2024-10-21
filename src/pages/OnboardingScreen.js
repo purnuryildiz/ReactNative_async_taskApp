@@ -13,6 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AsyncStorageKey from '../constants/AsyncStorageKey';
 import {useNavigation} from '@react-navigation/native';
+import ScreenName from '../constants/ScreenName';
 
 const width = Dimensions.get('screen').width;
 
@@ -21,7 +22,7 @@ const OnboardingScreen = () => {
 
   const handleOnboardingComplete = async () => {
     await AsyncStorage.setItem(AsyncStorageKey.onboardingComplete, 'true');
-    navigation.replace('AddTask');
+    navigation.replace(ScreenName.tasklist);
   };
 
   return (
