@@ -15,7 +15,7 @@ const PomodoroCounter = ({
         disabled={pomodoroCount === 0}
         style={[
           styles.button,
-          {backgroundColor: pomodoroCount === 0 ? '#f0ad4e' : '#e67e22'},
+          {backgroundColor: pomodoroCount === 0 ? '#E1BEE7' : '#B39DDB'},
         ]}>
         <Text style={styles.buttonText}>-</Text>
       </TouchableOpacity>
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
-    backgroundColor: '#e67e22',
-    marginHorizontal: 10,
+    backgroundColor: '#B39DDB',
+    marginHorizontal: 12,
   },
   buttonText: {
     fontSize: 12,

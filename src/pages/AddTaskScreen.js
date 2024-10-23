@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TextInput} from 'react-native';
 import React, {useLayoutEffect, useState} from 'react';
 import TaskNameIcon from '../assets/Images/SearchIcon.png';
 import CustomTextInput from '../components/CustomTextInput';
@@ -19,7 +19,9 @@ const AddTaskScreen = () => {
   const {data} = route.params || {};
   const [title, setTitle] = useState(data ? data.title : '');
   const [description, setDescription] = useState(data ? data.description : '');
-
+  const [pomodoroCount, setPomodoroCount] = useState(
+    data ? data.pomodoroCount : '',
+  );
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(data ? data.status : null);
   const [startDate, setStartDate] = useState(data ? data.startDate : '');
@@ -75,6 +77,7 @@ const AddTaskScreen = () => {
       startDate,
       endDate,
       status: value,
+      pomodoroCount: value === 'In Progress' ? pomodoroCount : null,
     };
     try {
       const existingTask = await AsyncStorage.getItem('tasks');
@@ -87,7 +90,7 @@ const AddTaskScreen = () => {
       }
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
 
-      navigation.navigate(ScreenName.tasklist);
+      navigation.navigate(ScreenName.tasklist, {tasks});
     } catch (error) {
       console.log(error, 'Saving task failed');
     }
@@ -151,6 +154,15 @@ const AddTaskScreen = () => {
           />
         </View>
       </View>
+      {value === 'In Progress' && (
+        <TextInput
+          placeholder="Pomodoro Count"
+          onChangeText={setPomodoroCount}
+          value={pomodoroCount}
+          keyboardType="numeric"
+          style={styles.pomodoroInput}
+        />
+      )}
 
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <CustomButton
@@ -204,5 +216,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: colors.text.primary,
+  },
+  pomodoroInput: {
+    borderWidth: 2,
+    width: '35%',
+    height: '4%',
+    alignSelf: 'flex-end',
+    marginRight: 10,
+    placeholder: 'pomodoro',
+    marginTop: -30,
+    paddingLeft: 10,
+    borderColor: colors.primary,
   },
 });

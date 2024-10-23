@@ -16,7 +16,6 @@ import CustomButton from '../components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../constants/ScreenName';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import LottieView from 'lottie-react-native';
 import renderEmptyList from '../components/EmptyList';
 import {useFocusEffect} from '@react-navigation/native';
 
@@ -45,7 +44,12 @@ const TaskListScreen = () => {
       const existingTasks = await AsyncStorage.getItem('tasks');
       const tasks = existingTasks ? JSON.parse(existingTasks) : [];
 
-      setTasks(tasks);
+      // Eğer tasks dizisi yoksa, setTasks ile boş bir dizi ayarlıyoruz.
+      if (!Array.isArray(tasks)) {
+        setTasks([]);
+      } else {
+        setTasks(tasks);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -53,22 +57,16 @@ const TaskListScreen = () => {
 
   const filterTasks = () => {
     if (searchText) {
-      //taskların title i ile searchText eşleşirse filtered dizisine aktar
       const filtered = tasks.filter(task =>
         task.title.toLowerCase().includes(searchText.toLowerCase()),
       );
-      //filtrelenmiş diziyi de state'e aktar
       setFilteredTasks(filtered);
     } else {
-      //searchText boş ise taskların hepsini ekrana bastır
       setFilteredTasks(tasks);
     }
   };
 
-  //useFocusEffect: Bu hook react navigation kütüphanesinden gelir ve bir ekrana odaklandığında belirli bir fonksiyonun ya da işlevin çalışmasını sağlar:
-
   useFocusEffect(
-    //fonskiyonun referansını hatırlatmaya yardımcı olmak için useCallBack kullanılır, loadTask fonsksiyonu bir kez oluşturuldu yukarıda , aynı referans çağırdığımda kullanılabilecek:
     useCallback(() => {
       loadTask();
     }, []),
@@ -81,8 +79,16 @@ const TaskListScreen = () => {
 
       await AsyncStorage.setItem('tasks', JSON.stringify(updatedTask));
     } catch (error) {
-      console.log('failed ');
+      console.log('Failed to delete task', error);
     }
+  };
+
+  const handlePomodoroUpdate = (title, newCount) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? {...task, pomodoroCount: newCount} : task,
+      ),
+    );
   };
 
   const renderHeader = () => (
@@ -97,9 +103,13 @@ const TaskListScreen = () => {
         <SafeAreaView style={[styles.container, {marginBottom: 20}]}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TouchableOpacity
-              onPress={() => navigation.navigate(ScreenName.pomodoroTimer)}
+              onPress={() =>
+                navigation.navigate(ScreenName.pomodoroTimer, {tasks})
+              }
               style={styles.button}>
-              <Text style={styles.buttonText}> Pomodoro</Text>
+              <Text style={[styles.buttonText, {color: colors.primary}]}>
+                Pomodoro
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={clearAll} style={styles.button}>
               <Text style={styles.buttonText}>Clear All</Text>
@@ -113,7 +123,9 @@ const TaskListScreen = () => {
             placeholder="Search Task"
           />
           <FlatList
-            keyExtractor={item => item?.id.toString()}
+            keyExtractor={item =>
+              item.id ? item.id.toString() : Math.random().toString()
+            }
             ListEmptyComponent={renderEmptyList}
             ListHeaderComponent={renderHeader}
             showsVerticalScrollIndicator={false}
@@ -122,6 +134,7 @@ const TaskListScreen = () => {
               <TodoItem
                 data={item}
                 onDelete={() => handleDeleteTask(item.id)}
+                onPomodoroUpdate={handlePomodoroUpdate} // Fonksiyonu burada ekliyoruz
               />
             )}
           />
@@ -159,12 +172,12 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 0,
     paddingVertical: 10,
-
     alignItems: 'center',
     backgroundColor: colors.white,
     width: '30%',
     marginBottom: -30,
     marginTop: 5,
+    borderRadius: 10,
   },
   buttonText: {
     color: colors.primary,

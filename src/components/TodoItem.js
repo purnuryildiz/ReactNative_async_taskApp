@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../themes/Colors';
@@ -8,22 +8,23 @@ import ScreenName from '../constants/ScreenName';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import PomodoroCounter from './PomodoroCounter';
 
-const TodoItem = ({data, onDelete}) => {
+const TodoItem = ({data, onDelete, onPomodoroUpdate}) => {
   const navigation = useNavigation();
   const [pomodoroCount, setPomodoroCount] = useState(data.pomodoroCount || 0);
 
-  // Pomodoro sayacını async storega 'a kaydet
-
+  // Pomodoro sayacını async storage'a kaydet
   const savePomodoroCount = async count => {
     try {
-      await AsyncStorage.setItem(`pomodoroCount_${data.id}`),
-        JSON.stringify(count);
+      await AsyncStorage.setItem(
+        `pomodoroCount_${data.id}`,
+        JSON.stringify(count),
+      );
     } catch (error) {
       console.log('Pomodoro count could not be saved', error);
     }
   };
 
-  //Pomodoro sayacını async storage 'dan oku
+  // Pomodoro sayacını async storage'dan oku
   const loadPomodoroCount = async () => {
     try {
       const count = await AsyncStorage.getItem(`pomodoroCount_${data.id}`);
@@ -31,7 +32,7 @@ const TodoItem = ({data, onDelete}) => {
         setPomodoroCount(JSON.parse(count));
       }
     } catch (error) {
-      console.log('Pomodoro count could not be loaded : ', error);
+      console.log('Pomodoro count could not be loaded: ', error);
     }
   };
 
@@ -40,16 +41,40 @@ const TodoItem = ({data, onDelete}) => {
   }, []);
 
   useEffect(() => {
-    savePomodoroCount(pomodoroCount); //pomodoro count her değiştiğinde kaydet
+    savePomodoroCount(pomodoroCount); // Pomodoro count her değiştiğinde kaydet
   }, [pomodoroCount]);
 
+  // Pomodoro atama işlevi
+  const onPomodoroAssign = (id, newCount) => {
+    console.log(`Task ${id} has been assigned ${newCount} pomodoros`);
+  };
+
   const increasePomodoro = () => {
-    setPomodoroCount(prevCount => prevCount + 1);
+    setPomodoroCount(prevCount => {
+      const newCount = prevCount + 1; // Pomodoro sayısını bir artır
+      onPomodoroAssign(data.id, newCount); // Pomodoro atandığında bildir
+
+      if (data.title) {
+        onPomodoroUpdate(data.id, newCount); // Pomodoro sayısını güncelle
+        console.log(`Updated pomodoro count for ${data.id}: ${newCount}`);
+      }
+
+      return newCount;
+    });
   };
 
   const decreasePomodoro = () => {
     if (pomodoroCount > 0) {
-      setPomodoroCount(prevCount => prevCount - 1);
+      setPomodoroCount(prevCount => {
+        const newCount = prevCount - 1;
+        if (data.title) {
+          onPomodoroUpdate(data.id, newCount); // Pomodoro sayısını güncelle
+          console.log(`Updated pomodoro count for ${data.id}: ${newCount}`);
+        }
+        return newCount;
+      });
+    } else {
+      console.log('Pomodoro count cannot be less than 0');
     }
   };
 
@@ -127,13 +152,15 @@ const TodoItem = ({data, onDelete}) => {
       </View>
 
       {data.status === 'In Progress' ? (
-        <View style={styles.pomodoroContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(ScreenName.pomodoroTimer, {data})}
+          style={styles.pomodoroContainer}>
           <PomodoroCounter
             pomodoroCount={pomodoroCount}
             increasePomodoro={increasePomodoro}
             decreasePomodoro={decreasePomodoro}
           />
-        </View>
+        </TouchableOpacity>
       ) : null}
     </View>
   );
@@ -193,12 +220,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.primary,
   },
+
   pomodoroContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
+    alignSelf: 'flex-start',
+    marginTop: 15,
     padding: 1,
-    backgroundColor: '#f9e2b1', 
-    borderRadius: 10,
+    marginHorizontal: 50,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 5,
   },
 });
