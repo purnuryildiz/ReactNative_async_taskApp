@@ -83,7 +83,7 @@ const TaskListScreen = () => {
     }
   };
 
-  const handlePomodoroUpdate = (title, newCount) => {
+  const handlePomodoroUpdate = (id, newCount) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
         task.id === id ? {...task, pomodoroCount: newCount} : task,
