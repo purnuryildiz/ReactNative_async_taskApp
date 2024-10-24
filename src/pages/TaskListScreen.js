@@ -19,10 +19,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import renderEmptyList from '../components/EmptyList';
 import {useFocusEffect} from '@react-navigation/native';
 
-const TaskListScreen = () => {
+const TaskListScreen = ({route}) => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(route.params?.tasks || []);
   const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {

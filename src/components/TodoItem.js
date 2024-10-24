@@ -29,7 +29,7 @@ const TodoItem = ({data, onDelete, onPomodoroUpdate}) => {
     try {
       const count = await AsyncStorage.getItem(`pomodoroCount_${data.id}`);
       if (count !== null) {
-        setPomodoroCount(JSON.parse(count));
+        setPomodoroCount(Number(JSON.parse(count)));
       }
     } catch (error) {
       console.log('Pomodoro count could not be loaded: ', error);
@@ -54,7 +54,7 @@ const TodoItem = ({data, onDelete, onPomodoroUpdate}) => {
       const newCount = prevCount + 1; // Pomodoro sayısını bir artır
       onPomodoroAssign(data.id, newCount); // Pomodoro atandığında bildir
 
-      if (data.title) {
+      if (data.id) {
         onPomodoroUpdate(data.id, newCount); // Pomodoro sayısını güncelle
         console.log(`Updated pomodoro count for ${data.id}: ${newCount}`);
       }

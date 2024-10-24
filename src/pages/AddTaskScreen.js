@@ -77,7 +77,7 @@ const AddTaskScreen = () => {
       startDate,
       endDate,
       status: value,
-      pomodoroCount: value === 'In Progress' ? pomodoroCount : null,
+      pomodoroCount: pomodoroCount,
     };
     try {
       const existingTask = await AsyncStorage.getItem('tasks');
@@ -89,6 +89,12 @@ const AddTaskScreen = () => {
         tasks.push(newTask);
       }
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
+      await AsyncStorage.setItem(
+        `pomodoroCount_${data.id}`,
+        JSON.stringify(pomodoroCount),
+      );
+
+      console.log(tasks);
 
       navigation.navigate(ScreenName.tasklist, {tasks});
     } catch (error) {
