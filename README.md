@@ -20,4 +20,6 @@
 
 </list>
 
+<h2>Preview:</h2>
+
 ![](image.gif)
