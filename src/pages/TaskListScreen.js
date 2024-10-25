@@ -44,7 +44,6 @@ const TaskListScreen = ({route}) => {
       const existingTasks = await AsyncStorage.getItem('tasks');
       const tasks = existingTasks ? JSON.parse(existingTasks) : [];
 
-      // Eğer tasks dizisi yoksa, setTasks ile boş bir dizi ayarlıyoruz.
       if (!Array.isArray(tasks)) {
         setTasks([]);
       } else {
@@ -78,6 +77,7 @@ const TaskListScreen = ({route}) => {
       setTasks(updatedTask);
 
       await AsyncStorage.setItem('tasks', JSON.stringify(updatedTask));
+      await loadTask(); // Güncel listeyi yeniden yükler
     } catch (error) {
       console.log('Failed to delete task', error);
     }
@@ -134,7 +134,7 @@ const TaskListScreen = ({route}) => {
               <TodoItem
                 data={item}
                 onDelete={() => handleDeleteTask(item.id)}
-                onPomodoroUpdate={handlePomodoroUpdate} // Fonksiyonu burada ekliyoruz
+                onPomodoroUpdate={handlePomodoroUpdate}
               />
             )}
           />

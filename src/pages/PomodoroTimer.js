@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   taskItem: {
     fontSize: 18,
-    color: colors.primary.text,
+    color: colors.primary,
     marginVertical: 5,
   },
   addTaskContainer: {
